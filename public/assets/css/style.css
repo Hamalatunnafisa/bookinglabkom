@@ -1,0 +1,225 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f6f9;
+}
+
+/* HEADER */
+.top-header {
+    padding: 20px;
+    background: #3c8dbc;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    margin: 0;
+    font-size: 24px;
+}
+
+.subtitle {
+    margin: 3px 0 0;
+    opacity: .8;
+}
+
+.login-btn {
+    color: white;
+    background: #367fa9;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+/* GRID FITUR */
+.grid-box {
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 10px;
+}
+
+/* KOTAK */
+.box {
+    color: white;
+    text-align: center;
+    padding: 25px 10px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.box:hover {
+    transform: scale(1.05);
+}
+
+.icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+/* WARNA FITUR */
+.box1 {
+    background: #00c0ef;
+}
+
+.box2 {
+    background: #00a65a;
+}
+
+.box3 {
+    background: #f39c12;
+}
+
+.box4 {
+    background: #dd4b39;
+}
+
+.box5 {
+    background: #605ca8;
+}
+
+.box6 {
+    background: #d81b60;
+}
+
+/* PENGANTAR */
+.intro {
+    background: white;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.btn-primary {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 18px;
+    background: #3c8dbc;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+/* KALENDER */
+.calendar-section {
+    background: white;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* ===== ROOM INFO ===== */
+.room-info {
+    background: white;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 12px;
+}
+
+.room-info h3 {
+    margin-top: 0;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.room-card {
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+}
+
+.room-card h4 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.room-card p {
+    margin: 2px 0;
+}
+
+.room-card .status {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/* warna */
+.room-card.busy {
+    background: #d9534f;
+}
+
+.room-card.busy .status {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.room-card.free {
+    background: #5cb85c;
+}
+
+.room-card.free .status {
+    background: rgba(255, 255, 255, 0.25);
+}
+.main-card {
+    display: flex;
+    gap: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-box,
+.room-info-box {
+    flex: 1;
+    /* otomatis setengah–setengah */
+}
+
+/* Grid info ruangan */
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.room-card {
+    padding: 12px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.room-card.busy {
+    background: #d9534f;
+}
+
+.room-card.free {
+    background: #5cb85c;
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    margin-top: 6px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .main-card {
+        flex-direction: column;
+    }
+}
