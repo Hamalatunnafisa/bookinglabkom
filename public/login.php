@@ -1,59 +1,94 @@
-<?php // login.php ?>
-<!doctype html>
-<html lang="id">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Login - Booking Lab</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Booking Laboratorium | Log in</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../public/assets/css/adminlte.min.css?v=3.2.0">
+
+  <!-- Style tambahan untuk menghilangkan underline -->
+  <style>
+      .login-box a {
+        text-decoration: none !important;
+      }
+      .login-box a:hover {
+        color: #0d6efd;
+      }
+  </style>
 </head>
 
-<body class="auth-page">
+<body class="hold-transition login-page">
+<div class="login-box">
 
-  <div class="auth-card">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit" class="btn btn-primary">Masuk</button>
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a class="h2"><b>Booking Laboratorium</b></a>
+    </div>
 
-      <p class="muted">Belum punya akun? <a href="register.php">Daftar</a></p>
-      <div id="loginMsg" class="muted"></div>
-    </form>
+    <div class="card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+
+      <!-- FORM LOGIN -->
+      <form action="dashboard.php" method="POST">
+        <div class="input-group mb-3">
+          <input type="text" name="username" class="form-control" placeholder="Username" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" id="remember">
+              <label for="remember">
+                Remember Me
+              </label>
+            </div>
+          </div>
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+        </div>
+      </form>
+
+      <hr>
+
+      <p class="mb-1">
+        <a href="forgot-password.php">Forgot password</a>
+      </p>
+      <p class="mb-0">
+        <a href="register.php" class="text-center">Register new member</a>
+      </p>
+    </div>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
+</div>
 
-      const form = document.getElementById('loginForm');
-
-      form.addEventListener('submit', function(e){
-        e.preventDefault();
-
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
-        const msg = document.getElementById('loginMsg');
-
-        const users = JSON.parse(localStorage.getItem('bl_users') || '[]');
-
-        const found = users.find(u => u.username === username && u.password === password);
-
-        if(found){
-          localStorage.setItem('bl_session', JSON.stringify({
-            username: found.username,
-            name: found.name,
-            role: found.role || 'user'
-          }));
-
-          window.location.href = 'dashboard.php';
-        } else {
-          msg.textContent = 'Username atau password salah.';
-        }
-      });
-
-    });
-  </script>
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../public/assets/js/adminlte.min.js?v=3.2.0"></script>
 
 </body>
 </html>

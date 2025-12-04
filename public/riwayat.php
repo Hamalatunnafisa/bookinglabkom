@@ -56,11 +56,46 @@
           <p class="mb-1"><strong>Jam:</strong> ${item.jam}</p>
           <p class="mb-1"><strong>Keperluan:</strong> ${item.keperluan}</p>
           <p class="mt-2"><span class="badge bg-secondary">Kode: ${item.kode}</span></p>
+          <button class="btn btn-primary btn-sm btn_qr" data-kode="${item.kode}">
+            Buat QR Code
+          </button>
         `;
 
         root.appendChild(box);
       });
+
+      // Event listener tombol QR Code
+// Event listener tombol QR Code
+// Event listener tombol QR Code
+document.querySelectorAll('.btn_qr').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const kode = btn.getAttribute('data-kode');
+    const booking = data.find(b => b.kode === kode);
+
+    // Encode data ke URL
+    const params = new URLSearchParams({
+      nama: booking.nama,
+      nim: booking.kelas,
+      lab: booking.lab,
+      tanggal: booking.tanggal,
+      waktu: booking.jam
     });
+
+    // Buka halaman QR
+    window.location.href = 'qr.html?' + params.toString();
+  });
+});
+
+  btn.addEventListener('click', () => {
+    const kode = btn.getAttribute('data-kode');
+    // Cari booking lengkap berdasarkan kode
+    const booking = data.find(b => b.kode === kode);
+    // Simpan seluruh data booking di sessionStorage
+    sessionStorage.setItem('qr_booking', JSON.stringify(booking));
+    // Buka halaman QR Code
+    window.location.href = 'qr.html';
+  });
+});
   </script>
 
 </body>
