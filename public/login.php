@@ -37,7 +37,7 @@
       <p class="login-box-msg">Sign in to start your session</p>
 
       <!-- FORM LOGIN -->
-      <form action="dashboard.php" method="POST">
+      <form action="login_proses.php" method="POST">
         <div class="input-group mb-3">
           <input type="text" name="username" class="form-control" placeholder="Username" required>
           <div class="input-group-append">

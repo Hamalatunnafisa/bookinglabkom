@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
     <!-- STYLE -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../../public/assets/css/style.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="header-right">
-        <a class="login-btn" href="login.php">Login</a>
+        <a class="login-btn btn btn-danger" href="../../public/login.php">Logout</a>
     </div>
 </header>
 
@@ -53,17 +53,10 @@
             <h3>Laporan</h3>
             <p>Laporan penggunaan</p>
         </a>
-
         <a href="admin_jadwal.php" class="box box5">
             <i class="fas fa-user-shield icon"></i>
             <h3>Admin Jadwal</h3>
             <p>Kelola jadwal</p>
-        </a>
-
-        <a href="login.php" class="box box6">
-            <i class="fas fa-sign-out-alt icon"></i>
-            <h3>Logout</h3>
-            <p>Keluar sistem</p>
         </a>
 
     </section>
