@@ -1,41 +1,60 @@
-<?php 
+<?php
 session_start();
-require_once "../app/config/config.php";
+include "../app/config/config.php  ";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// Ambil data dari form
+$username = $_POST['username'];
+$password = $_POST['password'];
 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+// Cek username di database
+$query = mysqli_query($conn, "SELECT * FROM user WHERE user='$username'");
+$data = mysqli_fetch_assoc($query);
 
-    // Ambil data user berdasarkan username
-    $query = $conn->query("SELECT * FROM user WHERE user='$username'");
-    $data = $query->fetch_assoc();
+// Jika username tidak ditemukan
+if (!$data) {
+    echo "<script>
+        alert('Username tidak ditemukan');
+        window.location='login.php';
+    </script>";
+    exit;
+}
 
-    if ($data) {
+// Cek password: bisa bcrypt atau MD5
+$password_db = $data['password'];
 
-        // Cek password
-        if (password_verify($password, $data['password'])) {
+$valid_password = false;
 
-            // Simpan session
-            $_SESSION['user_id'] = $data['id'];
-            $_SESSION['username'] = $data['user'];   // nama kolomnya 'user'
-            $_SESSION['role'] = $data['role'];
+// Cek bcrypt
+if (password_verify($password, $password_db)) {
+    $valid_password = true;
+}
 
-            // Redirect sesuai role
-            if ($data['role'] === "admin") {
-                header("Location: admin/index.php");
-                exit;
-            } else {
-                header("Location: dashboard.php");
-                exit;
-            }
+// Cek MD5 lama
+if ($password_db === md5($password)) {
+    $valid_password = true;
+}
 
-        } else {
-            echo "<script>alert('Password salah'); window.location='login.php';</script>";
-        }
+// Jika password salah
+if (!$valid_password) {
+    echo "<script>
+        alert('Password salah');
+        window.location='login.php';
+    </script>";
+    exit;
+}
 
-    } else {
-        echo "<script>alert('Username tidak ditemukan'); window.location='login.php';</script>";
-    }
+// Jika login berhasil → simpan session
+$_SESSION['id']      = $data['id'];
+$_SESSION['nim']     = $data['nim'];
+$_SESSION['username']= $data['user'];
+$_SESSION['role']    = $data['role'];
+
+// Arahkan sesuai role
+if ($data['role'] == 'admin') {
+    header("Location: admin/index.php");
+    exit;
+} else {
+    header("Location: user/index.php");
+    exit;
 }
 ?>

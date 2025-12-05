@@ -54,7 +54,7 @@
             <p>Laporan penggunaan lab</p>
         </a>
 
-        <a href="riwayat.php" class="box box5">
+        <a href="riwayat_booking.php" class="box box5">
             <i class="fas fa-history icon"></i>
             <h3>Riwayat</h3>
             <p>Riwayat pemakaian lab</p>
