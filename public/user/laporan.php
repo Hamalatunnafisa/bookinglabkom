@@ -1,3 +1,6 @@
+<?php 
+include '../../app/config/config.php';
+?>
 <!doctype html>
 <html>
 <head>
@@ -21,36 +24,36 @@
           <th>Tanggal</th>
           <th>Jam</th>
           <th>Keperluan</th>
+          <th>Status</th>
         </tr>
       </thead>
-      <tbody id="laporan_table"></tbody>
+
+      <tbody>
+        <?php
+        $query = $conn->query("SELECT * FROM booking_lab ORDER BY created_at DESC");
+
+        if ($query->num_rows == 0) {
+            echo "<tr><td colspan='7' class='text-center text-muted'>Belum ada data.</td></tr>";
+        } else {
+            while ($row = $query->fetch_assoc()) {
+                echo "
+                <tr>
+                    <td>$row[nama]</td>
+                    <td>$row[kelas]</td>
+                    <td>$row[lab]</td>
+                    <td>$row[tanggal]</td>
+                    <td>$row[jam]</td>
+                    <td>$row[keperluan]</td>
+                    <td>".ucfirst($row['status'])."</td>
+                </tr>
+                ";
+            }
+        }
+        ?>
+      </tbody>
+
     </table>
   </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const data = JSON.parse(localStorage.getItem('bl_bookings') || '[]');
-      const tbody = document.getElementById('laporan_table');
-
-      if (!data.length) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">Belum ada data.</td></tr>`;
-        return;
-      }
-
-      data.forEach(row => {
-        let tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.nama}</td>
-          <td>${row.kelas}</td>
-          <td>${row.lab}</td>
-          <td>${row.tanggal}</td>
-          <td>${row.jam}</td>
-          <td>${row.keperluan}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    });
-  </script>
 
 </body>
 </html>

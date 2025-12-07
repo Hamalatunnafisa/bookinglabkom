@@ -1,34 +1,39 @@
 <?php
 include '../../app/config/config.php';
 
-// Tanggal hari ini
 $today = date('Y-m-d');
 
-// Daftar lab default
+// Samakan dengan nama LAB di database
 $labs = [
-    'Lab 1' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
-    'Lab 2' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
-    'Lab 3' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
-    'Lab 4' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
+    'Lab Komputer 1' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
+    'Lab Komputer 2' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
+    'Lab Komputer 3' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
+    'Lab Komputer 4' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
 ];
 
-// Ambil booking hari ini yang statusnya diterima
-$query = "SELECT lab, jam, kelas
-    FROM booking_lab 
+// Ambil booking hari ini dengan status APPROVE
+$query = "
+    SELECT lab, jam, kelas
+    FROM booking_lab
     WHERE tanggal = '$today'
-    AND status = 'approved'
+    AND LOWER(status) = 'approve'
     ORDER BY STR_TO_DATE(jam, '%H:%i') ASC
 ";
 
 $result = mysqli_query($conn, $query);
 
-// Update status lab berdasarkan booking valid
+// Update status lab
 if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-
+        
         $lab = $row['lab'];
 
-        // Cegah lab tertimpa data berikutnya
+        // Pastikan nama lab ada dalam array
+        if (!array_key_exists($lab, $labs)) {
+            continue;
+        }
+
+        // Update hanya jika lab masih kosong
         if ($labs[$lab]['status'] === 'Kosong') {
             $labs[$lab] = [
                 'status' => 'Dipakai',
@@ -39,6 +44,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -125,7 +131,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
             <div class="room-grid">
                 <?php foreach ($labs as $namaLab => $info): ?>
-                    <div class="room-card <?= $info['status'] === 'Dipakai' ? 'busy' : 'free'; ?>">
+                    <div class="room-card <?= $info['status'] === 'dipakai' ? 'busy' : 'free'; ?>">
                         <h4><?= htmlspecialchars($namaLab) ?></h4>
                         <p><strong><?= $info['jam'] ?></strong></p>
                         <p><?= $info['kelas'] ?></p>

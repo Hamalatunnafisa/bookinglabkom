@@ -5,8 +5,6 @@
   <title>Booking Lab</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="public/assets/css/style.css">
-  <link rel="stylesheet" href="public/assets/css/adminlte.css">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 
@@ -17,12 +15,16 @@
     <h3 class="mb-4">Form Booking Laboratorium</h3>
 
     <form id="bookingForm">
-      <input type="text" id="b_nama" class="form-control mb-3" placeholder="Nama Lengkap" required>
-      <input type="text" id="b_kelas" class="form-control mb-3" placeholder="Kelas" required>
-      <input type="text" id="b_nim" class="form-control mb-3" placeholder="NIM" required>
-      <input type="text" id="b_nohp" class="form-control mb-3" placeholder="No HP" required>
+      
+      <input type="text" name="nama" class="form-control mb-3" placeholder="Nama Lengkap" required>
 
-      <select id="b_lab" class="form-select mb-3" required>
+      <input type="text" name="kelas" class="form-control mb-3" placeholder="Kelas" required>
+
+      <input type="text" name="nim" class="form-control mb-3" placeholder="NIM" required>
+
+      <input type="text" name="nohp" class="form-control mb-3" placeholder="No HP" required>
+
+      <select name="lab" class="form-select mb-3" required>
         <option value="">-- Pilih Lab --</option>
         <option>Lab Komputer 1</option>
         <option>Lab Komputer 2</option>
@@ -33,55 +35,51 @@
       <div class="row mb-3">
         <div class="col">
           <label>Tanggal</label>
-          <input type="date" id="b_tanggal" class="form-control" required>
+          <input type="date" name="tanggal" class="form-control" required>
         </div>
+
+      <div class="row mb-3">
         <div class="col">
-          <label>Jam</label>
-          <input type="time" id="b_jam" class="form-control" required>
+          <label>Jam Mulai</label>
+          <input type="time" name="jam_mulai" class="form-control" required>
+      </div>
+      
+      <div class="col">
+        <label>Jam Selesai</labe>
+        <input type="time" name="jam_selesai" class="form-control" required>
         </div>
       </div>
-
-      <input type="text" id="b_keperluan" class="form-control mb-4" placeholder="Keperluan / Mata Kuliah" required>
+      <input type="text" name="keperluan" class="form-control mb-4" placeholder="Keperluan / Mata Kuliah" required>
 
       <button class="btn btn-primary w-100">Submit</button>
-      
     </form>
 
   </div>
 </div>
 
-<script src="public/assets/js/app.js"></script>
-<script>
-function addBooking(data){
-  let arr = JSON.parse(localStorage.getItem('bl_bookings') || '[]');
-  arr.push(data);
-  localStorage.setItem('bl_bookings', JSON.stringify(arr));
-}
 
+<script>
+// Submit pakai AJAX
 document.getElementById('bookingForm').addEventListener('submit', function(e){
   e.preventDefault();
 
-  const booking = {
-    id: 'BK' + Date.now(),
-    nama: b_nama.value,
-    kelas: b_kelas.value,
-    nim: b_nim.value,
-    nohp: b_nohp.value,
-    lab: b_lab.value,
-    tanggal: b_tanggal.value,
-    jam: b_jam.value,
-    keperluan: b_keperluan.value,
-    status: 'pending',
-    kode: Math.random().toString(36).substring(2, 10)
-  };
+  const formData = new FormData(this);
 
-  addBooking(booking);
-
-  alert("Booking berhasil! Kode: " + booking.kode);
-  window.location = "riwayat.php";
+  fetch('booking_proses.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.text())
+  .then(data => {
+      if(data.trim() === "success"){
+          alert("Booking berhasil dikirim ke admin!");
+          window.location = "riwayat.php";
+      } else {
+          alert("Gagal menyimpan: " + data);
+      }
+  });
 });
 </script>
-
 
 </body>
 </html>
