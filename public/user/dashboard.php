@@ -1,3 +1,10 @@
+
+<?php
+session_start();
+include 'chek_login.php';
+?>
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -21,7 +28,7 @@
     </div>
 
     <div class="header-right">
-        <a class="login-btn btn btn-danger" href="../../public/login.php">Logout</a>
+        <a class="login-btn btn btn-danger" href="../logout.php">Logout</a>
     </div>
 </header>
 

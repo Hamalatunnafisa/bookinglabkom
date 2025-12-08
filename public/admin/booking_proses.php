@@ -1,48 +1,56 @@
 <?php
-// Koneksi ke database
 include "../../app/config/config.php";
 
-// Pastikan form di-submit dengan metode POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // Ambil semua data dari form
-    $nama       = mysqli_real_escape_string($conn, $_POST['nama']);
-    $kelas      = mysqli_real_escape_string($conn, $_POST['kelas']);
-    $nim        = mysqli_real_escape_string($conn, $_POST['nim']);
-    $nohp       = mysqli_real_escape_string($conn, $_POST['nohp']);
-    $lab        = mysqli_real_escape_string($conn, $_POST['lab']);
-    $tanggal    = mysqli_real_escape_string($conn, $_POST['tanggal']);
-    $jam        = mysqli_real_escape_string($conn, $_POST['jam']);
-    $keperluan  = mysqli_real_escape_string($conn, $_POST['keperluan']);
-    $status     = mysqli_real_escape_string($conn, $_POST['status']);
-
-    // Query simpan data
-    $query = "INSERT INTO booking_lab 
-            (nama, kelas, nim, nohp, lab, tanggal, jam, keperluan, status)
-            VALUES 
-            ('$nama', '$kelas', '$nim', '$nohp', '$lab', '$tanggal', '$jam', '$keperluan', '$status')";
-
-    $result = mysqli_query($conn, $query);
-
-    if ($result) {
-        echo "
-        <script>
-            alert('Booking berhasil disimpan.');
-            window.location.href = 'booking.php';
-        </script>
-        ";
-    } else {
-        echo "
-        <script>
-            alert('Gagal menyimpan booking: ".mysqli_error($conn)."');
-            window.location.href = 'booking.php';
-        </script>
-        ";
-    }
-
-} else {
-    // Jika akses langsung tanpa POST
-    header("Location: booking.php");
-    exit;
-}
+// ambil semua booking
+$data = $conn->query("SELECT * FROM booking_lab ORDER BY created_at DESC");
 ?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Kelola Booking – Admin</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container py-5">
+<h3 class="mb-4">Kelola Booking Laboratorium</h3>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Nama</th>
+            <th>Lab</th>
+            <th>Tanggal</th>
+            <th>Waktu</th>
+            <th>Keperluan</th>
+            <th>Status</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <?php while($b = $data->fetch_assoc()): ?>
+        <tr>
+            <td><?= $b['nama'] ?></td>
+            <td><?= $b['lab'] ?></td>
+            <td><?= $b['tanggal'] ?></td>
+            <td><?= $b['jam_mulai'] ?> - <?= $b['jam_selesai'] ?></td>
+            <td><?= $b['keperluan'] ?></td>
+            <td><?= $b['status'] ?></td>
+
+            <td>
+                <a href="status_proses.php?id=<?= $b['id'] ?>&s=approve" class="btn btn-success btn-sm">Approve</a>
+                <a href="status_proses.php?id=<?= $b['id'] ?>&s=reject" class="btn btn-danger btn-sm">Reject</a>
+            </td>
+        </tr>
+        <?php endwhile; ?>
+    </tbody>
+</table>
+
+</div>
+
+</body>
+</html>

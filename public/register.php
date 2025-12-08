@@ -1,9 +1,11 @@
 <?php
 session_start();
-require_once "../app/config/config.php";// file koneksi database
+require_once "../config/config.php"; // file koneksi database
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user = $_POST['user'];
+
+    $nama = $_POST['nama'];
+    $username = $_POST['username']; // HARUS username, bukan user
     $nim = $_POST['NIM'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
@@ -14,9 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
+
     // Cek apakah username atau NIM sudah ada
-    $cek = $conn->prepare("SELECT * FROM user WHERE user=? OR NIM=?");
-    $cek->bind_param("ss", $user, $nim);
+    $cek = $conn->prepare("SELECT * FROM users WHERE username=? OR NIM=?");
+    $cek->bind_param("ss", $username, $nim);
     $cek->execute();
     $result = $cek->get_result();
 
@@ -25,12 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // Enkripsi password
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    // Hash password
+    $hashed_password = md5($password);
 
-    // Insert data ke database, role default = 'user'
-    $stmt = $conn->prepare("INSERT INTO user (user, NIM, password, role) VALUES (?, ?, ?, 'user')");
-    $stmt->bind_param("sss", $user, $nim, $hashed_password);
+    // Insert ke tabel USERS baru
+    $stmt = $conn->prepare("
+        INSERT INTO users (nama, username, NIM, password, role, status, created_at, updated_at)
+        VALUES (?, ?, ?, ?, 'user', 'active', NOW(), NOW())
+    ");
+    $stmt->bind_param("ssss", $nama, $username, $nim, $hashed_password);
 
     if ($stmt->execute()) {
         echo "<script>alert('Registrasi berhasil! Silahkan login.'); window.location='login.php';</script>";
@@ -42,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -69,8 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <p class="login-box-msg">Register a new membership</p>
       <form action="" method="POST">
         <div class="input-group mb-3">
-          <input type="text" name="user" class="form-control" placeholder="Username" required>
+          <input type="text" name="nama" class="form-control" placeholder="nama" required>
           <div class="input-group-append"><div class="input-group-text"><span class="fas fa-user"></span></div></div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" name="username" class="form-control" placeholder="username" required>
+          <div class="input-group-append"><div class="input-group-text"><span class="fas fa-username"></span></div></div>
         </div>
         <div class="input-group mb-3">
           <input type="text" name="NIM" class="form-control" placeholder="NIM" required>

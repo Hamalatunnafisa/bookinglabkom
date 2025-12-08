@@ -1,3 +1,31 @@
+<?php
+session_start();
+require_once '../config/config.php';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+
+  $query = "SELECT * FROM users WHERE username='$username' and password=md5('$password')";
+  $result=$conn->query($query);
+  $row = $result->num_rows;
+  if($row>0){
+    $data = $result->fetch_assoc();
+    $_SESSION['id'] = $data['id'];
+    $_SESSION['username'] = $data['username'];
+    $_SESSION['role'] = $data['role'];
+
+    if($data['role']=='admin'){
+      header("Location: admin/dashboard.php");
+    } else {
+      header("Location: user/dashboard.php");
+    }
+    echo "<script>alert('Login berhasil');</script>";
+  } else {
+    echo "<script>alert('Login gagal: Cek username dan password Anda'); window.location='login.php';</script>";
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +65,7 @@
       <p class="login-box-msg">Sign in to start your session</p>
 
       <!-- FORM LOGIN -->
-      <form action="login_proses.php" method="POST">
+      <form action="" method="POST">
         <div class="input-group mb-3">
           <input type="text" name="username" class="form-control" placeholder="Username" required>
           <div class="input-group-append">

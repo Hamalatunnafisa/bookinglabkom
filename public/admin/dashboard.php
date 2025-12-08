@@ -2,8 +2,9 @@
 include '../../app/config/config.php';
 
 $today = date('Y-m-d');
+$now_time = date('H:i:s');
 
-// Samakan dengan nama LAB di database
+// Nama lab harus sesuai yang ada di database
 $labs = [
     'Lab Komputer 1' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
     'Lab Komputer 2' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
@@ -11,40 +12,49 @@ $labs = [
     'Lab Komputer 4' => ['status' => 'Kosong', 'jam' => '-', 'kelas' => '—'],
 ];
 
-// Ambil booking hari ini dengan status APPROVE
+// Ambil booking hari ini dengan status approve, urut dari jam_mulai paling awal
 $query = "
-    SELECT lab, jam, kelas
+    SELECT lab, jam_mulai, jam_selesai, kelas
     FROM booking_lab
     WHERE tanggal = '$today'
     AND LOWER(status) = 'approve'
-    ORDER BY STR_TO_DATE(jam, '%H:%i') ASC
+    ORDER BY jam_mulai ASC
 ";
 
 $result = mysqli_query($conn, $query);
 
-// Update status lab
 if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-        
         $lab = $row['lab'];
 
-        // Pastikan nama lab ada dalam array
-        if (!array_key_exists($lab, $labs)) {
-            continue;
-        }
+        // kalau nama lab di DB tidak ada di array $labs, skip (menghindari undefined index)
+        if (!isset($labs[$lab])) continue;
 
-        // Update hanya jika lab masih kosong
-        if ($labs[$lab]['status'] === 'Kosong') {
+        $jam_mulai  = $row['jam_mulai'];
+        $jam_selesai = $row['jam_selesai'];
+        $kelas      = $row['kelas'];
+
+        // jika sekarang berada di rentang jam_mulai <= now < jam_selesai => Sedang Dipakai
+        if ($now_time >= $jam_mulai && $now_time < $jam_selesai) {
+            // prioritas: sedang dipakai (jika sudah terisi jangan timpa)
             $labs[$lab] = [
-                'status' => 'Dipakai',
-                'jam'    => htmlspecialchars($row['jam']),
-                'kelas'  => htmlspecialchars($row['kelas'])
+                'status' => 'Sedang Dipakai',
+                'jam'    => $jam_mulai . ' - ' . $jam_selesai,
+                'kelas'  => $kelas
+            ];
+        } 
+        // jika belum mulai tapi masih kosong (upcoming booking), isi kalau sebelumnya masih 'Kosong'
+        elseif ($now_time < $jam_mulai && $labs[$lab]['status'] === 'Kosong') {
+            $labs[$lab] = [
+                'status' => 'Dipesan',
+                'jam'    => $jam_mulai . ' - ' . $jam_selesai,
+                'kelas'  => $kelas
             ];
         }
+        // jika sudah lewat jam_selesai kita tidak perlu melakukan apa-apa (tetap Kosong)
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -127,15 +137,18 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         <!-- Status Ruangan -->
         <div class="room-info-box">
-            <h3>Status Ruangan Hari Ini</h3>
+            <h3>Status Ruangan Hari Ini (<?= htmlspecialchars($today) ?>)</h3>
 
             <div class="room-grid">
-                <?php foreach ($labs as $namaLab => $info): ?>
-                    <div class="room-card <?= $info['status'] === 'dipakai' ? 'busy' : 'free'; ?>">
+                <?php foreach ($labs as $namaLab => $info): 
+                    // tentukan kelas CSS: busy kalau tidak Kosong
+                    $isBusy = ($info['status'] !== 'Kosong');
+                ?>
+                    <div class="room-card <?= $isBusy ? 'busy' : 'free'; ?>">
                         <h4><?= htmlspecialchars($namaLab) ?></h4>
-                        <p><strong><?= $info['jam'] ?></strong></p>
-                        <p><?= $info['kelas'] ?></p>
-                        <span class="status"><?= $info['status'] ?></span>
+                        <p><strong><?= htmlspecialchars($info['jam']) ?></strong></p>
+                        <p><?= htmlspecialchars($info['kelas']) ?></p>
+                        <span class="status"><?= htmlspecialchars($info['status']) ?></span>
                     </div>
                 <?php endforeach; ?>
             </div>
