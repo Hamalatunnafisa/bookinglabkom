@@ -46,7 +46,7 @@ $result = mysqli_query($conn, $sql);
 
     <h3 class="mb-4 fw-bold">Riwayat Booking Saya</h3>
 
-    <?php 
+    <?php
     if (mysqli_num_rows($result) == 0) {
         echo "<div class='alert alert-info'>Anda belum memiliki riwayat booking.</div>";
     }

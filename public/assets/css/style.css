@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 100%);
+    background: linear-gradient(135deg, #c3e6f4 0%, #dcf1f4 100%);
     min-height: 100vh;
     color: #333;
 }
@@ -270,7 +270,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     background: white;
-    border-radius: 1rem;
+    border-radius: 0rem;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     margin: 2rem 0;
@@ -297,7 +297,7 @@ table tr:hover {
 .login-container {
     background: white;
     padding: 4rem;
-    border-radius: 1rem;
+    border-radius: 0rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     max-width: 500px;
     margin: 5rem auto;
@@ -322,7 +322,7 @@ table tr:hover {
 }
 
 .login-container::after {
-    content: '🔒';
+    content: '';
     position: absolute;
     top: -10px;
     left: 50%;
@@ -361,7 +361,7 @@ table tr:hover {
     background: white;
     margin: 2rem 20px;
     padding: 2rem;
-    border-radius: 1rem;
+    border-radius: 0rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     max-width: 1200px;
     margin-left: auto;

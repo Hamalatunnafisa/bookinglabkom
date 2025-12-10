@@ -53,7 +53,7 @@
         <h3 class="mb-3">Daftar Jadwal</h3>
 
         <?php
-        require "../../app/config/config.php";
+        require "../../config/config.php";
 
         $data = $conn->query("SELECT * FROM jadwal ORDER BY tanggal, jam");
         ?>

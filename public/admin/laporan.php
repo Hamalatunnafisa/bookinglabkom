@@ -1,5 +1,5 @@
 <?php
-include "../../app/config/config.php";
+include "../../config/config.php";
 
 // Ambil laporan penggunaan lab
 $query = mysqli_query($conn, "

@@ -14,8 +14,7 @@ $labs = [
 ];
 
 // Ambil semua booking hari ini yang statusnya pending ATAU approve
-$query = "
-    SELECT lab, jam_mulai, jam_selesai, kelas, status
+$query = "SELECT lab, jam_mulai, jam_selesai, kelas, status
     FROM booking_lab
     WHERE tanggal = '$today'
     AND LOWER(status) IN ('pending', 'approve')
@@ -75,7 +74,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     <div class="header-left">
         <h5 class="subtitle">Selamat Datang, User</h5>
         <h1 class="title">Booking Laboratorium</h1>
-        <p class="subtitle">Sistem pemantauan & booking lab komputer — UIN Saizu</p>
+        <p class="subtitle">Sistem pemantauan & booking lab komputer — UIN Saizu Purbalingga</p>
     </div>
     <br>
     <div class="header-left">
@@ -94,21 +93,21 @@ if ($result && mysqli_num_rows($result) > 0) {
         <a href="booking.php" class="box">
             <i class="fas fa-calendar-plus icon"></i>
             <h3>Booking</h3>
-            <p>Buat booking lab</p>
+            <p>Buat booking Lab</p>
         </a>
 
         <!-- CEK KETERSEDIAAN -->
         <a href="cek.php" class="box">
             <i class="fas fa-door-open icon"></i>
             <h3>Cek Ketersediaan</h3>
-            <p>Lihat ruang yang kosong</p>
+            <p>Lihat Lab Komputer yang Kosong</p>
         </a>
 
         <!-- RIWAYAT -->
         <a href="riwayat.php" class="box">
             <i class="fas fa-history icon"></i>
             <h3>Riwayat</h3>
-            <p>Booking kamu</p>
+            <p>Cek Riwayat Booking kamu</p>
         </a>
 
     </section>
@@ -118,10 +117,9 @@ if ($result && mysqli_num_rows($result) > 0) {
     <section class="intro">
         <h2>Pendahuluan</h2>
         <p>
-            Dikalangan Mahasiswa UIN Saizu terdapat 4 ruang laboratorium komputer.
-            Untuk memudahkan mahasiswa, dosen, dan admin dalam memantau serta melakukan
-            booking laboratorium, sistem ini hadir sebagai solusi online yang terstruktur,
-            cepat, dan transparan.
+        Selamat datang di Sistem Booking Laboratorium UIN Saizu Purbalingga Fakultas Sainstek.
+        Platform ini memudahkan anda booking laboratorium Komputer dan memantau ketersediaannya secara real-time
+        dengan fitur yang sederhana dan mudah digunakan.
         </p>
 
         <a href="booking.php" class="btn-primary">Buat Booking</a>

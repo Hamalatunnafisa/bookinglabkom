@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Booking Lab</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../public/assets/css/style.css">
   
   <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
@@ -68,7 +69,7 @@ document.getElementById('bookingForm').addEventListener('submit', function(e){
   })
   .then(r => r.text())
   .then(res => {
-      if(res.trim() === "success"){
+      if(res.trim() === "berhasil"){
           alert("Booking berhasil dikirim ke admin");
           window.location = "riwayat.php";
       } else {

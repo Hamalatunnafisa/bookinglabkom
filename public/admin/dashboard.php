@@ -86,7 +86,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     <div class="header-left">
         <h5 class="subtitle">Selamat Datang, Admin</h5>
         <h1 class="title">Booking Laboratorium</h1>
-        <p class="subtitle">Sistem pemantauan & booking lab komputer — UIN Saizu</p>
+        <p class="subtitle">Sistem pemantauan & booking lab komputer — UIN Saizu Purbalingga</p>
     </div>
     <br>
     <div class="header-left">
@@ -100,7 +100,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
     <!-- MENU -->
     <section class="grid-box">
-        <a href="booking.php" class="box box1">
+        <a href="manage_booking.php" class="box box1">
             <i class="fas fa-calendar-check icon"></i>
             <h3>Kelola Booking</h3>
             <p>Data booking masuk</p>

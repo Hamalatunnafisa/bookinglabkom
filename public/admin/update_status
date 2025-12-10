@@ -1,0 +1,38 @@
+<?php
+include "../../config/config.php";
+// Saat admin mengubah status jadi selesai
+//Sistem mengambil detail booking
+//Sistem otomatis membuat laporan baru
+//Tidak ada lagi input manual
+$id = $_GET['id'];
+$status = $_GET['status'];
+
+// Update status booking
+mysqli_query($conn, "UPDATE booking_lab SET status='$status' WHERE id='$id'");
+
+// Jika status selesai → buat laporan otomatis
+if ($status == 'selesai') {
+
+    // Ambil data booking
+    $data = mysqli_query($conn, "SELECT * FROM booking_lab WHERE id='$id'");
+    $row = mysqli_fetch_assoc($data);
+
+    // Insert ke laporan
+    mysqli_query($conn, "
+        INSERT INTO laporan_penggunaan_lab 
+        (lab_id, peminjam, keperluan, tanggal, jam_mulai, jam_selesai, created_at)
+        VALUES (
+            '{$row['lab_id']}',
+            '{$row['nama']}',
+            '{$row['keperluan']}',
+            '{$row['tanggal']}',
+            '{$row['jam_mulai']}',
+            '{$row['jam_selesai']}',
+            NOW()
+        )
+    ");
+}
+
+header("Location: riwayat.php");
+exit;
+?>

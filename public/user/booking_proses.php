@@ -4,7 +4,7 @@ include "../../config/config.php";
 
 // Pastikan user sudah login
 if (!isset($_SESSION['id'])) {
-    echo "error: not logged in";
+    echo "error: kamu harus login terlebih dahulu.";
     exit;
 }
 
@@ -42,7 +42,7 @@ $keperluan, $kode_booking, $qr_content, $status
 );
 
 if ($q->execute()) {
-    echo "success";
+    echo "berhasil";
 } else {
     echo "error: " . $conn->error;
 }
