@@ -1,102 +1,104 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Riwayat Booking</title>
+<?php 
+session_start();
+include '../../config/config.php';
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
+// Cek login
+if (!isset($_SESSION['id'])) {
+    echo "Anda belum login";
+    exit;
+}
+
+$user_id = $_SESSION['id'];
+
+// Ambil semua riwayat booking user
+$sql = "SELECT * FROM booking_lab 
+        WHERE id = '$user_id'
+        ORDER BY tanggal DESC, jam_mulai DESC";
+
+$result = mysqli_query($conn, $sql);
+?>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Riwayat Booking Saya</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+<style>
+.card-booking {
+    border-left: 6px solid #0d6efd;
+    transition: 0.2s;
+}
+.card-booking:hover {
+    transform: scale(1.01);
+    background: #f8f9fa;
+}
+.label-bold {
+    font-weight: bold;
+}
+</style>
+
 </head>
 
-<body class="bg-light">
+<body>
 
-  <div class="container py-5">
+<div class="container py-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3>Riwayat Booking</h3>
+    <h3 class="mb-4 fw-bold">Riwayat Booking Saya</h3>
 
-      <!-- Tombol Reset -->
-      <button id="btn_reset" class="btn btn-danger btn-sm">
-        Reset Data
-      </button>
+    <?php 
+    if (mysqli_num_rows($result) == 0) {
+        echo "<div class='alert alert-info'>Anda belum memiliki riwayat booking.</div>";
+    }
+
+    while ($row = mysqli_fetch_assoc($result)) : ?>
+
+    <div class="card mb-3 card-booking shadow-sm">
+        <div class="card-body">
+
+            <!-- STATUS -->
+            <div class="text-end">
+                <?php if ($row['status'] == 'pending'): ?>
+                    <span class="badge bg-warning text-dark">Pending</span>
+                <?php elseif ($row['status'] == 'approved'): ?>
+                    <span class="badge bg-success">Disetujui</span>
+                <?php elseif ($row['status'] == 'rejected'): ?>
+                    <span class="badge bg-danger">Ditolak</span>
+                <?php endif; ?>
+            </div>
+
+            <!-- ISI DATA BOOKING -->
+            <h5 class="fw-bold mb-3"><?= $row['lab']; ?></h5>
+
+            <p class="mb-1"><span class="label-bold">Tanggal:</span> <?= $row['tanggal']; ?></p>
+            <p class="mb-1"><span class="label-bold">Jam:</span> <?= $row['jam_mulai']; ?> - <?= $row['jam_selesai']; ?></p>
+            <p class="mb-1"><span class="label-bold">Keperluan:</span> <?= htmlspecialchars($row['keperluan']); ?></p>
+
+                <!-- KODE BOOKING -->
+        <p class="mt-3 mb-1"><span class="label-bold">Kode Booking:</span></p>
+        <div class="p-2 bg-light border rounded">
+            <?= $row['kode_booking']; ?>
+        </div>
+
+        <!-- TOMBOL QR -->
+        <a href="qrcode.php?nama=<?= urlencode($row['nama']); ?>
+        &nim=<?= urlencode($row['nim']); ?>
+        &lab=<?= urlencode($row['lab']); ?>
+        &tanggal=<?= urlencode($row['tanggal']); ?>
+        &waktu=<?= urlencode($row['jam_mulai'].' - '.$row['jam_selesai']); ?>"
+        class="btn btn-primary mt-3">
+            Lihat QR
+        </a>
+
+
+
+        </div>
     </div>
 
-    <div id="list_booking"></div>
+    <?php endwhile; ?>
 
-  </div>
-
-  <script>
-    // Fungsi untuk reset data dari localStorage
-    document.getElementById('btn_reset').addEventListener('click', () => {
-      if (confirm("Yakin ingin menghapus SEMUA data booking?")) {
-        localStorage.removeItem('bl_bookings');
-        alert("Semua data berhasil dihapus.");
-        location.reload(); 
-      }
-    });
-
-    // Render Riwayat
-    document.addEventListener('DOMContentLoaded', () => {
-      const data = JSON.parse(localStorage.getItem('bl_bookings') || '[]');
-      const root = document.getElementById('list_booking');
-
-      if (!data.length) {
-        root.innerHTML = `<p class="text-muted">Belum ada booking.</p>`;
-        return;
-      }
-
-      data.forEach(item => {
-        const box = document.createElement('div');
-        box.className = "card p-3 mb-3 shadow-sm";
-
-        box.innerHTML = `
-          <h5>${item.nama} (${item.kelas})</h5>
-          <p class="mb-1"><strong>Lab:</strong> ${item.lab}</p>
-          <p class="mb-1"><strong>Tanggal:</strong> ${item.tanggal}</p>
-          <p class="mb-1"><strong>Jam:</strong> ${item.jam}</p>
-          <p class="mb-1"><strong>Keperluan:</strong> ${item.keperluan}</p>
-          <p class="mt-2"><span class="badge bg-secondary">Kode: ${item.kode}</span></p>
-          <button class="btn btn-primary btn-sm btn_qr" data-kode="${item.kode}">
-            Buat QR Code
-          </button>
-        `;
-
-        root.appendChild(box);
-      });
-
-      // Event listener tombol QR Code
-// Event listener tombol QR Code
-// Event listener tombol QR Code
-document.querySelectorAll('.btn_qr').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const kode = btn.getAttribute('data-kode');
-    const booking = data.find(b => b.kode === kode);
-
-    // Encode data ke URL
-    const params = new URLSearchParams({
-      nama: booking.nama,
-      nim: booking.kelas,
-      lab: booking.lab,
-      tanggal: booking.tanggal,
-      waktu: booking.jam
-    });
-
-    // Buka halaman QR
-    window.location.href = 'qr.html?' + params.toString();
-  });
-});
-
-  btn.addEventListener('click', () => {
-    const kode = btn.getAttribute('data-kode');
-    // Cari booking lengkap berdasarkan kode
-    const booking = data.find(b => b.kode === kode);
-    // Simpan seluruh data booking di sessionStorage
-    sessionStorage.setItem('qr_booking', JSON.stringify(booking));
-    // Buka halaman QR Code
-    window.location.href = 'qr.html';
-  });
-});
-  </script>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 </body>
 </html>

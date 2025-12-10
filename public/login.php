@@ -38,9 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+
   <!-- Theme style -->
   <link rel="stylesheet" href="../public/assets/css/adminlte.min.css?v=3.2.0">
+  <link rel="stylesheet" href="../../public/assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  
 
   <!-- Style tambahan untuk menghilangkan underline -->
   <style>

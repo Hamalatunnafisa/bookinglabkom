@@ -1,8 +1,23 @@
 <?php
-include '../../app/config/config.php';
+include '../../config/config.php';
 
-// Ambil semua data booking (riwayat)
-$sql = "SELECT * FROM booking_lab ORDER BY tanggal DESC, jam DESC";
+// Tanggal hari ini
+$today = date("Y-m-d");
+
+// Menu (today / all)
+$menu = isset($_GET['menu']) ? $_GET['menu'] : 'today';
+
+// Query berdasarkan menu
+if ($menu == 'today') {
+    $sql = "SELECT * FROM booking_lab 
+            WHERE tanggal = '$today' 
+            ORDER BY jam_mulai ASC";
+} else {
+    $sql = "SELECT * FROM booking_lab 
+            WHERE tanggal < '$today'
+            ORDER BY tanggal DESC, jam_mulai DESC";
+}
+
 $result = mysqli_query($conn, $sql);
 ?>
 <!doctype html>
@@ -10,7 +25,6 @@ $result = mysqli_query($conn, $sql);
 <head>
 <meta charset="utf-8">
 <title>Riwayat Booking</title>
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 
@@ -19,6 +33,23 @@ $result = mysqli_query($conn, $sql);
 <div class="container py-5">
 
     <h3 class="mb-4 fw-bold">Riwayat Booking Laboratorium</h3>
+
+    <!-- NAV TABS -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link <?= $menu=='today' ? 'active fw-bold' : '' ?>" 
+               href="?menu=today">
+               Hari Ini
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link <?= $menu=='all' ? 'active fw-bold' : '' ?>" 
+               href="?menu=all">
+               Riwayat Semua
+            </a>
+        </li>
+    </ul>
 
     <div class="card shadow-sm">
         <div class="card-body">
@@ -41,8 +72,10 @@ $result = mysqli_query($conn, $sql);
                     </thead>
 
                     <tbody>
-                        <?php $no = 1; ?>
-                        <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+                        <?php 
+                        $no = 1; 
+                        while ($row = mysqli_fetch_assoc($result)) : 
+                        ?>
                         <tr>
                             <td class="text-center"><?= $no++; ?></td>
                             <td><?= htmlspecialchars($row['nama']); ?></td>
@@ -51,8 +84,13 @@ $result = mysqli_query($conn, $sql);
                             <td><?= htmlspecialchars($row['nohp']); ?></td>
                             <td class="text-center"><?= $row['lab']; ?></td>
                             <td class="text-center"><?= $row['tanggal']; ?></td>
-                            <td class="text-center"><?= $row['jam']; ?></td>
+
+                            <td class="text-center">
+                                <?= $row['jam_mulai']; ?> - <?= $row['jam_selesai']; ?>
+                            </td>
+
                             <td><?= htmlspecialchars($row['keperluan']); ?></td>
+
                             <td class="text-center text-capitalize">
                                 <?= $row['status']; ?>
                             </td>

@@ -1,5 +1,5 @@
 <?php
-include '../../app/config/config.php';
+include '../../config/config.php';
 
 $tanggal = $_GET['tanggal'] ?? null;
 

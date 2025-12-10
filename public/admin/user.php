@@ -1,5 +1,5 @@
 <?php
-include "../../app/config/config.php";
+include "../../config/config.php";
 
 // Ambil data user
 $query = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");

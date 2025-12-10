@@ -6,3 +6,4 @@ $database = "bookinglabkom"; // nama database
 
 // Membuat koneksi
 $conn = new mysqli($servername, $username, $password, $database);?>
+
