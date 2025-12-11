@@ -60,7 +60,7 @@ $query = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
                                     <td><?= ucfirst($row['status']) ?></td>
                                     <td><?= $row['created_at'] ?></td>
                                     <td>
-                                        <a href="user_edit.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm btn-block">Edit</a>
+                                        <a href="edituser.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm btn-block">Edit</a>
                                         <a href="user_hapus.php?id=<?= $row['id'] ?>"
                                         onclick="return confirm('Yakin ingin menghapus?')"
                                         class="btn btn-danger btn-sm btn-block mt-1">
