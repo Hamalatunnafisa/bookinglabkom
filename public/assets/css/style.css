@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 3000px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -78,6 +78,12 @@ header {
     color: inherit;
     display: block;
 }
+
+.card-full {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
 
 .box:hover {
     transform: translateY(-10px);
@@ -267,7 +273,7 @@ form button:hover {
 
 /* Tables */
 table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
     background: white;
     border-radius: 0rem;
@@ -401,6 +407,7 @@ table tr:hover {
     }
 
     form {
+        
         margin: 1rem 20px;
         padding: 1.5rem;
     }
@@ -475,7 +482,21 @@ table,
     align-items: center;
     gap: 7px;
 }
+/* Biar input pencarian memanjang penuh */
+.input-group {
+    width: 100%;
+}
 
+/* Biar tombol tidak turun ke bawah */
+.input-group .btn {
+    white-space: nowrap;
+}
+
+/* Kalau ada padding berlebih dari card */
+.input-group input.form-control {
+    flex: 1;
+    min-width: 0;
+}
 /* === ICON ADMIN LTE STYLE === */
 
 .icon {

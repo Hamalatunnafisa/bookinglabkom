@@ -3,6 +3,10 @@ include "../../config/config.php";
 
 // Ambil data user
 $query = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
+if (isset($_POST['Hapus'])) {
+    $id = $_POST['id'];
+    mysqli_query($conn, "DELETE FROM users WHERE id='$id'");
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,11 +65,13 @@ $query = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
                                     <td><?= $row['created_at'] ?></td>
                                     <td>
                                         <a href="edituser.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm btn-block">Edit</a>
-                                        <a href="user_hapus.php?id=<?= $row['id'] ?>"
-                                        onclick="return confirm('Yakin ingin menghapus?')"
-                                        class="btn btn-danger btn-sm btn-block mt-1">
-                                            Hapus
-                                        </a>
+                                        <form method="POST" style="display:inline-block;" 
+                                              onsubmit="return confirm('Yakin ingin menghapus user ini?');">
+                                            <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                            <button type="submit" name="Hapus" class="btn btn-danger btn-sm btn-block mt-1">
+                                                Hapus
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

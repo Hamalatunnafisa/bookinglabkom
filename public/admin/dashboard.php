@@ -100,7 +100,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
     <!-- MENU -->
     <section class="grid-box">
-        <a href="manage_booking.php" class="box box1">
+        <a href="manage_boking.php" class="box box1">
             <i class="fas fa-calendar-check icon"></i>
             <h3>Kelola Booking</h3>
             <p>Data booking masuk</p>
