@@ -8,7 +8,7 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-$user_id = $_SESSION['id']; // <--- TAMBAHKAN INI
+$user_id = $_SESSION['id'];
 
 $nama        = $_POST['nama'];
 $kelas       = $_POST['kelas'];
